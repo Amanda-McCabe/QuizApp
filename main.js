@@ -70,11 +70,11 @@ function generateStartPage() {
 }
 
 function generateQuestionPage(){
-  //const i = quiz.currentQuestion;
+  for(let i = 0; i < quiz.questions.length; i++)
   return `
       <div class="group">
         <p class="large-text">question <span class="text-yellow">${quiz.currentQuestion +1} of 5</span></p>
-         <p>${quiz.questions[0].question}'</p>
+         <p>${quiz.questions[i].question}</p>
       </div>
       <div>
         <form action="/action_page.php" method="get">
@@ -110,6 +110,7 @@ function generateQuestionPage(){
 
 
 function generateResultsPage(){
+  
   return `
           <div class="group">
             <p class="large-text">results</p>
