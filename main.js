@@ -70,10 +70,10 @@ function generateStartPage() {
 }
 
 function generateQuestionPage(){
-  for(let i = 0; i < quiz.questions.length; i++)
-  return `
+  const i = quiz.questionNumber;
+    return `
       <div class="group">
-        <p class="large-text">question <span class="text-yellow">${quiz.currentQuestion +1} of 5</span></p>
+        <p class="large-text">question <span class="text-yellow"> ${quiz.questionNumber +1} of 5</span></p>
          <p>${quiz.questions[i].question}</p>
       </div>
       <div>
@@ -104,23 +104,22 @@ function generateQuestionPage(){
         </form>
       </div>
       <div class="group">
-        <p class="large-text">correct <span class="text-yellow">${quiz.score}</span></p>
+        <p class="large-text">correct <span class="text-yellow">${quiz.score} of 5</span></p>
       </div>`;
 }
 
 
 function generateResultsPage(){
-  
-  return `
+    return `
           <div class="group">
             <p class="large-text">results</p>
-            <p><span class="correct-text">correct answer:</span> A pen</p>
+            <p><span class="correct-text">correct answer:</span>correct</p>
           <div class="group">
-            <p class="correct-text">correct <span class="text-yellow">1 / 6</span></p>
+            <p class="correct-text">correct <span class="text-yellow"> ${quiz.score} of 5</span></p>
           </div>
           <div class="group">
             <div class="explanation" id="explanation-box"> 
-              <p class="explanation-text">The first thing Chiron gives Percy is a pen. A pen that once clicked turns into a sword.</p>
+              <p class="explanation-text">this is the answer</p>
             </div>
           </div>
           <div class="group">
@@ -131,6 +130,16 @@ function generateResultsPage(){
             </form>
           </div>`;
 }
+
+// function generateEndPage(){
+//   return `
+//         <div class="endPage">
+//             <h2> Congratulations! You finished the quiz!</h2>
+//             <h3> Here is how you did:</h3>
+//         <div class="group">
+//             <p class="large-text">correct <span class="text-yellow">${quiz.score} of 5</span></p>
+//           </div>`;
+// }
 
 
 function renderStartPage() {
@@ -173,12 +182,13 @@ function renderResultsPage(){
   $('main').html(generateResultsPage());
 }
 
-// function handleContinueButton() {
-//   $('main').on('click', '#continue-btn', function(event){
-//     event.preventDefault();
-//     renderQuestions();
-//   });
-// }
+function handleContinueButton() {
+  $('main').on('click', '#continue-btn', function(event){
+    event.preventDefault();
+    quiz.questionNumber++;
+    renderQuestions();
+  });
+}
 
 
 // function checkAnswer(ans){
@@ -191,17 +201,13 @@ function renderResultsPage(){
 //   } 
 // }
 
-// function generateEndPage() {
-
-// }
-
-
 
 function quizApp(){
   renderStartPage();
   handleStartButton();
   handleSubmitButton();
-  handleRestartButton(); 
+  handleRestartButton();
+  handleContinueButton();
 }
 
-$(quizApp);
+$(quizApp);//function call here is jquery
