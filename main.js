@@ -57,8 +57,8 @@ const quiz = {
   score: 0
 };
   
-//let score=0;
-//let results='';
+
+let results='';
 
 function generateStartPage() {
   return ` <div class="startPage">
@@ -71,7 +71,7 @@ function generateStartPage() {
 
 function generateQuestionPage(){
   const i = quiz.questionNumber;
-    return `
+  return `
       <div class="group">
         <p class="large-text">question <span class="text-yellow"> ${quiz.questionNumber +1} of 5</span></p>
          <p>${quiz.questions[i].question}</p>
@@ -80,26 +80,26 @@ function generateQuestionPage(){
         <form action="/action_page.php" method="get">
           <div class="flex-inline">
             <div class="choice-group question">
-              <input type="radio" name="choice" id="answer1"  required="">
+              <input type="radio" name="choice" id="answer1" value="${quiz.questions[i].answers[0]}" required>
               <label for="answer1">${quiz.questions[i].answers[0]}</label>
             </div>
             <div class="choice-group question">
-              <input type="radio" name="choice" id="answer2">
+              <input type="radio" name="choice" id="answer2" value="${quiz.questions[i].answers[1]}">
               <label for="answer2">${quiz.questions[i].answers[1]}</label>
             </div>
             <div class="choice-group question">
-              <input type="radio" name="choice" id="answer3">
+              <input type="radio" name="choice" id="answer3" value="${quiz.questions[i].answers[2]}">
               <label for="answer3">${quiz.questions[i].answers[2]}</label>
             </div>
             <div class="choice-group question">
-              <input type="radio" name="choice" id="answer4">
+              <input type="radio" name="choice" id="answer4" value="${quiz.questions[i].answers[3]}">
               <label for="answer4">${quiz.questions[i].answers[3]}</label>
             </div>
           </div>
   
           <div class="button-group">
-            <button id="submit-button" type="submit" value="submit">submit.</button>
-            <button id="restart-button" type="submit" value="restart">restart.</button>
+            <button id="submit-button" type="submit" value="submit">submit</button>
+            <button id="restart-button" type="submit" value="restart">restart</button>
           </div>
         </form>
       </div>
@@ -110,17 +110,13 @@ function generateQuestionPage(){
 
 
 function generateResultsPage(){
-    return `
+  const i = quiz.questionNumber;
+  return `
           <div class="group">
-            <p class="large-text">results</p>
-            <p><span class="correct-text">correct answer:</span>correct</p>
+            <p class="large-text">${results}</p>
+            <p><span class="correct-text">correct answer: ${quiz.questions[i].correctAnswer} </span></p>
           <div class="group">
             <p class="correct-text">correct <span class="text-yellow"> ${quiz.score} of 5</span></p>
-          </div>
-          <div class="group">
-            <div class="explanation" id="explanation-box"> 
-              <p class="explanation-text">this is the answer</p>
-            </div>
           </div>
           <div class="group">
             <form action="/action_page.php" method="get">
@@ -131,15 +127,16 @@ function generateResultsPage(){
           </div>`;
 }
 
-// function generateEndPage(){
-//   return `
-//         <div class="endPage">
-//             <h2> Congratulations! You finished the quiz!</h2>
-//             <h3> Here is how you did:</h3>
-//         <div class="group">
-//             <p class="large-text">correct <span class="text-yellow">${quiz.score} of 5</span></p>
-//           </div>`;
-// }
+function generateEndPage(){
+  return `
+        <div class="endPage">
+            <h2> Congratulations! You finished the quiz!</h2>
+            <h3> Here is how you did:</h3>
+        <div class="group">
+            <p class="large-text">correct <span class="text-yellow">${quiz.score} of 5</span></p>
+            <button id="restart-button" type="submit" value="restart">restart</button>
+          </div>`;
+}
 
 
 function renderStartPage() {
@@ -158,22 +155,22 @@ function renderQuestions(){
 }
 
 function handleSubmitButton(){
-  $('main').on('click', '#submit-button', function(event){
+  $('main').on('submit', 'form', event => {
     event.preventDefault();
     //gather the input
-    //const selected = $('input:checked');
-    //const answer = selected.val();
-    //results = checkAnswer(answer);
+    const selected = $('input:checked');
+    const answer = selected.val();
+    results = checkAnswer(answer);
     //render result or correct answer page
-    renderResultsPage(); //build
+    renderResultsPage(results); //build
   });
 }
 
 function handleRestartButton(){
   $('main').on('click', '#restart-button', event => {
     event.preventDefault();
-    //score = 0;
-    //QUESTIONS.currentQuestion = 0;
+    quiz.score = 0;
+    quiz.questionNumber = 0;
     renderStartPage();
   });
 }
@@ -186,21 +183,30 @@ function handleContinueButton() {
   $('main').on('click', '#continue-btn', function(event){
     event.preventDefault();
     quiz.questionNumber++;
-    renderQuestions();
+    if(quiz.questions.length === quiz.questionNumber){
+      renderEndPage();
+    }
+    else{
+      renderQuestions();
+    }
+    //if questions are done then go to end page
   });
 }
 
+function checkAnswer(ans){
+  const i = quiz.questionNumber;
+  if(ans ===  quiz.questions[i].correctAnswer){
+    quiz.score++;
+    return 'You got it right!';
+  }
+  else{
+    return 'You got it wrong, sorry.';
+  } 
+}
 
-// function checkAnswer(ans){
-//   const i = QUESTIONS.currentQuestion;
-//   if(ans ===  QUESTIONS.questions[i].correctAnswer){
-//     return 'You got it right!', score++;
-//   }
-//   else{
-//     return 'You got it wrong, sorry.';
-//   } 
-// }
-
+function renderEndPage(){
+  $('main').html(generateEndPage());
+}
 
 function quizApp(){
   renderStartPage();

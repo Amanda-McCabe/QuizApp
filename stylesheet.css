@@ -1,26 +1,15 @@
-.container{
-    width: 800px;
-    max-width: 80%;
-    background-color: white;
-    border-radius: 5px;
-    padding: 10px;
-    box-shadow: 0 0 10px 2px;
-}
-.btn-grid{
+
+.btn-grid {
     display: grid;
     grid-template-columns: repeat(2, auto);
     gap: 10px;
     margin: 20px 0;
 }
 
-.startPage{
-    justify-content: center;
+main {
+    color: black;
+    display: flex;
+    flex-direction: column;
     text-align: center;
-    width: 800px;
-    max-width: 80%;
-    background-color: white;
-    border-radius: 5px;
-    padding: 10px;
-    box-shadow: 0 0 10px 2px;
-    font-family: comic sans sm ;
+    justify-content: center;
 }
